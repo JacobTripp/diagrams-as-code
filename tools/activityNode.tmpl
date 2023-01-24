@@ -1,0 +1,38 @@
+package {{.LowerName}}
+
+import (
+	"github.com/JacobTripp/diagrams-as-code/dot/attribute"
+	"github.com/JacobTripp/diagrams-as-code/dot/node"
+)
+
+type {{.Name}} struct {
+  n node.Node
+}
+
+func New() {{.Name}} {
+  return {{.Name}}{
+    n: node.New("{{.Name}}"),
+  }
+}
+
+func ({{.Initial}} {{.Name}}) String() string {
+  return {{.Initial}}.n.String()
+}
+
+func ({{.Initial}} {{.Name}}) Name() string {
+  return {{.Initial}}.n.Name
+}
+
+func ({{.Initial}} {{.Name}}) GetAttrs() []attribute.Attribute {
+  return {{.Initial}}.n.Attributes
+}
+
+func ({{.Initial}} *{{.Name}}) AddAttribute(name, value string) {
+  {{.Initial}}.n.AddAttr(
+    attribute.New(name, value),
+  )
+}
+
+func ({{.Initial}} {{.Name}}) Node() node.Node{
+  return {{.Initial}}.n
+}
