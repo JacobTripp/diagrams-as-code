@@ -20,6 +20,7 @@ directory.
 ## TODO
 - [ ] Documentation
 - [ ] CLI program to guide the design process.
+- [ ] Make into a server (automate with docker)
 - [ ] Add a .Write(io.Writer) method to replace the use of .String()
 - [ ] Get away from DOT and inject a rendering dependency, like to produce
   straight SVGs or even use DOT still.
