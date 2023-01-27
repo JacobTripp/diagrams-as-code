@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	usecase "github.com/JacobTripp/diagrams-as-code/diagrams/useCase"
+	usecase "github.com/JacobTripp/diagrams-as-code/useCase"
 )
 
 func main() {

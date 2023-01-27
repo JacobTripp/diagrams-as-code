@@ -53,7 +53,7 @@ var testTmpl = `package {{.LowerName}}
 import (
   "testing"
 
-	"github.com/JacobTripp/diagrams-as-code/diagrams/process/activity/path"
+	"github.com/JacobTripp/diagrams-as-code/process/activity/path"
 	"github.com/JacobTripp/diagrams-as-code/dot/node"
 	"github.com/stretchr/testify/assert"
 )
