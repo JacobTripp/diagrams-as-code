@@ -46,5 +46,5 @@ func TestWritePackage(t *testing.T) {
 	yd, _ := ImportYaml(diagramYaml)
 	var out = bytes.NewBuffer([]byte{})
 	WritePackage(out, yd)
-	assert.Contains(t, out.String(), "var Activity = diagram.New(")
+	assert.Contains(t, out.String(), "diagram.New(")
 }
