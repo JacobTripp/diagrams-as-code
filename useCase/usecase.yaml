@@ -9,7 +9,7 @@ diagram:
     requirements strictly from the outside looking in; They specify the value
     that the system delivers to customers.
 nodes:
-  - name: Use Case
+  - name: Case
     Description: >-
       Use cases must have clear pass/fail criteria. A use case, or job, might
       be as simple as allowing the user the log in or as complex as executing a

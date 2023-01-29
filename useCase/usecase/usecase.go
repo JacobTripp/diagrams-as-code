@@ -9,8 +9,8 @@ import (
 	"github.com/JacobTripp/diagrams-as-code/diagram"
 )
 
-var UseCase = diagram.NodeType{
-	Name: "Use Case",
+var Case = diagram.NodeType{
+	Name: "Case",
 	Description: "",
 	Attributes: map[string]string{
 		"cluster": "true",
@@ -19,8 +19,8 @@ var UseCase = diagram.NodeType{
 	},
 }
 
-func (d UseCase) AddUseCase(name string) error {
-	if err := d.d.AddNode(UseCase, name); err != nil {
+func (d UseCase) AddCase(name string) error {
+	if err := d.d.AddNode(Case, name); err != nil {
 		return err
 	}
 	return nil
@@ -41,7 +41,7 @@ func (d UseCase) AddActor(name string) error {
 	return nil
 }
 var adders = map[string]func(UseCase, string) error {
-"UseCase": UseCase.AddUseCase,
+"Case": UseCase.AddCase,
 "Actor": UseCase.AddActor,
 }
 var Communication = diagram.EdgeType{
@@ -83,7 +83,7 @@ func New(name string) UseCase {
 			Name: "Use Case",
 			Description: "A use case is a situation where your system is used to fulfill one or more of your customer's requirements; a use case captures a piece of functionality that the system provides. Use cases are the starting point of your model since they affect and guide all the other elements within your system's design. They describe a system's requirements strictly from the outside looking in; They specify the value that the system delivers to customers.",
 		},
-		diagram.WithNodeTypes(UseCase,Actor),
+		diagram.WithNodeTypes(Case,Actor),
 		diagram.WithEdgeTypes(Communication,Includes,Generalizaion),
 	)
 	return UseCase{name: name, d: &diagram}
