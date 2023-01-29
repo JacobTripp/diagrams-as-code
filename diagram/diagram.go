@@ -31,6 +31,7 @@ func (n *Node) connectTo(e EdgeType, t NodeName) {
 
 type Diagram struct {
 	t         DiagramType
+	Name      string
 	nodeTypes NodeTypes
 	edgeTypes EdgeTypes
 	nodes     Nodes
@@ -63,6 +64,11 @@ func WithEdgeTypes(types ...EdgeType) diagramOption {
 			d.edgeTypes[EdgeName(t.Name)] = t
 		}
 	}
+}
+
+func (d Diagram) New(name string) Diagram {
+	d.Name = name
+	return d
 }
 
 func (d *Diagram) AddNode(t NodeType, value string) error {

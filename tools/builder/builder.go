@@ -19,41 +19,80 @@ var nodeTemplate, _ = template.New("").Parse(`{{range .Nodes}}
 var {{.NodeName}} = diagram.NodeType{
 	Name: "{{.Name}}",
 	Description: "{{.Description}}",{{if .Attributes}}
-	Attributes: {
+	Attributes: map[string]string{
 	{{range $k, $v := .Attributes}}	"{{$k}}": "{{$v}}",
 	{{end}}},
 {{end}}}
-{{end}}`)
+
+func (d {{$.Diagram.DiagramName}}) Add{{.NodeName}}(name string) error {
+	if err := d.d.AddNode({{.NodeName}}, name); err != nil {
+		return err
+	}
+	return nil
+}
+{{end}}var adders = map[string]func({{$.Diagram.DiagramName}}, string) error {
+{{range .Nodes}}"{{.NodeName}}": {{$.Diagram.DiagramName}}.Add{{.NodeName}},
+{{end}}}`)
 
 var edgeTemplate, _ = template.New("").Parse(`{{range .Edges}}
 var {{.EdgeName}} = diagram.EdgeType{
 	Name: "{{.Name}}",
 	Description: "{{.Description}}",{{if .Attributes}}
-	Attributes: {
+	Attributes: map[string]string{
 	{{range $k, $v := .Attributes}}	"{{$k}}": "{{$v}}",
 	{{end}}},
 {{end}}}
 {{end}}`)
 
 var diagramTemplate, _ = template.New("").Parse(`
-var {{.DiagramName}} = diagram.New(
-	DiagramType{
-		Name: "{{.Name}}",
-		Description: "{{.Description}}",{{if .Attributes}}
-		Attributes: {
-		{{range $k, $v := .Attributes}}	"{{$k}}": "{{$v}}",
-		{{end}}},{{end}}
-	},
-	WithNodeTypes({{.NodeNames}}),
-	WithEdgeTypes({{.EdgeNames}}),
-)`)
+type {{.DiagramName}} struct {
+	d *diagram.Diagram
+	name string
+}
+
+func New(name string) {{.DiagramName}} {
+	diagram := diagram.New(
+		diagram.DiagramType{
+			Name: "{{.Name}}",
+			Description: "{{.Description}}",{{if .Attributes}}
+			Attributes: map[string]string{
+			{{range $k, $v := .Attributes}}	"{{$k}}": "{{$v}}",
+			{{end}}},{{end}}
+		},
+		diagram.WithNodeTypes({{.NodeNames}}),
+		diagram.WithEdgeTypes({{.EdgeNames}}),
+	)
+	return {{.DiagramName}}{name: name, d: &diagram}
+}
+
+func (d {{.DiagramName}}) Connect(t diagram.EdgeType, from, to string) error {
+	if err := d.d.AddEdge(t, from, to); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (d {{.DiagramName}}) Add(nodeType, name string) error {
+	fn, ok := adders[nodeType]
+	if !ok {
+		return fmt.Errorf("'%s' is not a valid node type", nodeType)
+	}
+	if err := fn(d, name); err != nil {
+		return err
+	}
+	return nil
+}`)
 
 var packageTemplate, _ = template.New("").Parse(`//
 // Auto-generated code, DO NOT EDIT
 //
 package {{.PackageName}}
 
-import "github.com/JacobTripp/diagrams-as-code/diagram"
+import (
+	"fmt"
+
+	"github.com/JacobTripp/diagrams-as-code/diagram"
+)
 `)
 
 type Entity struct {

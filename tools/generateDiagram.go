@@ -104,7 +104,11 @@ func main() {
 		panic(err)
 	}
 
-	dirName := strings.ToLower(diagram.Diagram.Name)
+	dirName := strings.ReplaceAll(
+		strings.ToLower(diagram.Diagram.Name),
+		" ",
+		"",
+	)
 	err = makeDir(dirName)
 	if err != nil {
 		panic(err)
@@ -112,7 +116,11 @@ func main() {
 	packagePath := fmt.Sprintf(
 		"%s/%s.go",
 		dirName,
-		strings.ToLower(diagram.Diagram.Name),
+		strings.ReplaceAll(
+			strings.ToLower(diagram.Diagram.Name),
+			" ",
+			"",
+		),
 	)
 	packageFile, err := os.Create(packagePath)
 	if err != nil {

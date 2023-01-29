@@ -38,22 +38,6 @@ with the system. Use a generalization arrow to show this.
 
 #### How to create an Actor
 ```Go
-// creating two actors
-user := usecase.NewActor("User")
-admin := usecase.NewActor("Administrator")
-
-// adding the actors to your diagram
-// creating a diagram
-fooSystem := usecase.NewDiagram("Foo System")
-
-// add a basic user
-fooSystem.AddActor(user)
-
-// add a user that can do everything that "user" can do plus more
-fooSystem.AddActor(admin, WithGeneralizaion(user))
-// OR you can add a generalization after adding both actors
-fooSystem.AddActor(admin)
-fooSystem.AddGeneralization(admin, user)
 ```
 
 ## Use Cases - System Requirements
@@ -72,57 +56,9 @@ A rule of thumb to help determine if you have a use case is:
 
 #### How to create a UseCase
 ```Go
-// create a use case
-createUserAccount := usecase.NewUseCase("Create a user account")
-
-// add the use case to the diagram
-fooSystem.AddUseCase(createUserAccount)
 ```
 
-### Use Case Descriptions
-Every use case should be accompanied by a description to help system designers
-understand how the system's concerns will be met, how to know the most important
-actor is, and the steps that are involved.
-
-There are no rules for what exactly goes into a use case description but some
-examples are:
-  - **Use case description detail**:
-      What it means and why it's useful.
-  - **Related requirements**:
-      Some indication as to which requirements this use case partially or
-      completely fufills.
-  - **Goal in context**:
-      The use case's place within the system and why this use case is important.
-  - **Preconditions**:
-      What needs to happen before the use case can be executed.
-  - **Successful end condition**:
-      What the system's condition should be if the sue case executes
-      successfully.
-  - **Failed end condition**:
-      What the system's condition should be if the use case fails to execute
-      successfully.
-  - **Primary actors**:
-      The main actors that participate in the use case. Often includes the
-      actors that trigger or directly receive information from the use case's
-      execution.
-  - **Secondary actors**:
-      Actors that participate but are not the main players in a use case's
-      execution.
-  - **Included use cases**:
-      Use cases that it depends on
-  - **Base use cases**:
-      Use cases that are inherited
-  - **Trigger**:
-      The event triggered by an actor that causes the use case to execute.
-  - **Main flow**:
-      The place to describe each of the important steps in a use case's normal
-      execution.
-  - **Extensions**:
-      A description of any alternative steps from the ones described in the main
-      flow.
-
 #### How to add UseCaseDescription
-TODO
 ```Go
 ```
 
@@ -138,11 +74,6 @@ the use case's description.
 
 #### How to create a Communication
 ```Go
-// create a communication line between admin and createUseAccount
-fooSystem.AddCommunication(admin, createUserAccount)
-
-// add another communication line to createUseAccount
-fooSystem.AddCommunication(user, createUserAccount)
 ```
 
 ## Use Case Communications
@@ -159,10 +90,6 @@ completely reuses all of the steps from the use case being included.
 
 #### How to add an Include relationship
 ```Go
-fooSystem.AddInclude(
-  fooSystem.UseCase("Create a user account"),
-  fooSystem.UseCase("Another UseCase Child"),
-)
 ```
 
 ### The Generalization Relationship (inheritance)
@@ -184,47 +111,14 @@ must occur in the specialized use case.
 
 #### How to add an Inheritance
 ```Go
-fooSystem.AddInheritance(
-  fooSystem.UseCase("Create a user account"),
-  fooSystem.UseCase("Another UseCase Child"),
-)
 ```
 ## Complete Example
 ```Go
-func main() {
-  fooSystem := usecase.NewDiagram("Foo System")
-
-  fooSystem.AddGeneralization(
-    fooSystem.Actor("User"),
-    fooSystem.Actor("Administrator"),
-  )
-
-  fooSystem.AddCommunication(
-    fooSystem.Actor("Administrator"),
-    fooSystem.UseCase("Create Account"),
-  )
-
-  fooSystem.AddCommunication(
-    fooSystem.Actor("User"),
-    fooSystem.UseCase("Create Account"),
-  )
-  fooSystem.AddInheritance(
-    fooSystem.UseCase("Create Account"),
-    fooSystem.UseCase("Create User Account"),
-  )
-  fooSystem.AddInheritance(
-    fooSystem.UseCase("Create Account"),
-    fooSystem.UseCase("Create Admin Account"),
-  )
-
-  fmt.Println(fooSystem.String())
-}
 ```
 
 Run the Go code to generate DOT code:
 
 ```Bash
-go run example/useCase/readmeExample.go | dot -Tsvg > out.html
 ```
 
 And that will produce an svg image of the following:

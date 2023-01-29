@@ -1,0 +1,131 @@
+---
+diagram:
+  name: Activity
+  description: >-
+    Use cases show what your system should do. Activity diagrams allow you to
+    specify how your system will accomplish its goals. Activity diagrams show
+    high-level actions chained together to represent a process occurring in your
+    systems. For example, you can use an activity diagram to model the steps
+    involved with creating a blog account.
+  attributes:
+    "splines": "ortho"
+nodes:
+  - name: Action
+    description: >-
+      An Action is a step in the overall activity. For example, for the activity
+      of
+      'Was Car' there could be the Actions of Lather, Rinse, and Dry.
+    attributes:
+      "shape": "rect"
+      "style": "rounded"
+  - name: Object
+    description: >-
+      Objects are data objects that are an important aspect of the process
+      you're modeling. They are represented as rectangular nodes in the flow
+      of the actions.
+    attributes:
+      "shape": "rect"
+  - name: Decision
+    description: >-
+      Decisions are used when you want to execute a different sequence of
+      actions depending on a condition. Each branch from a decision must have a
+      Guard Condition that determine which edge is taken after a decision node.
+      Guard Conditions must be mutually exclusive.
+    attributes:
+      "label": ""
+      "shape": "utr"
+      "orientation": "90"
+  - name: Expansion
+    description: >-
+      Expansion regions show that actions in a region are performed for each
+      item in an input collection. For example, an expansion region could be
+      used to model a software function that takes a list of files as input and
+      seraches each file for a search term.
+    attributes:
+      "label": ""
+      "shape": "noverhang"
+  - name: Activity End
+    description: This represents and end to the entire activity.
+    attributes:
+      "label": ""
+      "shape": "doublecircle"
+      "fillcolor": "black"
+  - name: Path End
+    description: >-
+      Sometimes and activity has many paths that end at different times and
+      that can be represented individually.
+    attributes:
+      "label": "X"
+      "shape": "doublecircle"
+  - name: fork
+    description: Forks represent parallel actions
+    attributes:
+      "label": ""
+      "shape": "restrictionsite"
+      "orientation": "90"
+  - name: Init
+    description: This represents a basic start to an activity flow.
+    attributes:
+      "label": ""
+      "shape": "circle"
+      "fillcolor": "black"
+  - name: Join
+    description: >-
+      Joins mean that all incoming actions (started by a fork) must finish
+      before the flow can proceed past the join.
+    attributes:
+      "label": ""
+      "shape": "restrictionsite"
+      "orientation": "270"
+  - name: Merge
+    description: >-
+      A Merge node marks the end of the conditional behavior started at the
+      decision node.
+    attributes:
+      "label": ""
+      "shape": "diamond"
+  - name: Partition
+    description: >-
+      Actions can be grouped into partitions to represent different involvement
+      of participants. For example, an activity for support might have some
+      actions taken by 1st support, some by 2nd support, and some by
+      engineering.
+    attributes:
+      "label": ""
+      "cluster": "true"
+  - name: Send Signal
+    description: >-
+      Send signals are signals sent to any external participant. Send signals
+      are non-blocking, they instantly go to the next step after sending the
+      signal.
+    attributes:
+      "shape": "house"
+      "orientation": "90"
+  - name: Recieve Signal
+    description: >-
+      A receive signal has the effect of waking up an action in your activity
+      diagram. Receive signals are blocking, they must get a response before
+      moving to the next step.
+    attributes:
+      "shape": "house"
+      "orientation": "270"
+  - name: Time Event
+    description: A timeout represents a waiting period during and activity.
+    attributes:
+      "shape": "invtriangle"
+  - name: Transformation
+    description: >-
+      Transformations represent how objects change during the transmissions. For
+      example, one action might output and object but only the transformation of
+      that object as Object.Attribute.
+    attributes:
+      "shape": "Msquare"
+edges:
+  - name: Default
+    description: The main wait activities are connected.
+    attributes:
+      "arrowhead": "vee"
+  - name: Interrupt
+    description: The action to take for an inturrupt.
+    attributes:
+      "arrowhead": "curve"

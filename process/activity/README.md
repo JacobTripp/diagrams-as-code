@@ -15,19 +15,6 @@ An Action is a step in the overall activity. For example, for the activity of
 
 #### How to create an action
 ```Go
-// Create new diagram
-fooActivity := activity.NewDiagram("Wash Car")
-
-// Add next appends the activity to the end of the list
-// activities are ordered lists
-fooActivity.AddAction(fooActivity.Action("Lather"))
-fooActivity.AddAction(fooActivity.Action("Dry"))
-
-// Activities can be inserted at spots, 1 is the first activity
-// because the initial node is always 0, the final node is always
-// number of activities plus 1 for the initial node and plus 1
-// for itself. So after this insert the final node is index 4
-fooActivity.InsertActionAfter(1,fooActivity.Action("Dry"))
 ```
 
 ### Linking to other activity diagrams
@@ -44,7 +31,6 @@ Conditions must be mutually exclusive.
 
 #### How to add a decision
 ```Go
-fooActivity.AddDecision("is dirty", "is clean")
 ```
 
 ### Merges
