@@ -114,7 +114,7 @@ func main() {
 		panic(err)
 	}
 	packagePath := fmt.Sprintf(
-		"%s/%s.go",
+		"%s/%s.gen.go",
 		dirName,
 		strings.ReplaceAll(
 			strings.ToLower(diagram.Diagram.Name),

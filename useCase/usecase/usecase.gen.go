@@ -1,6 +1,9 @@
 //
 // Auto-generated code, DO NOT EDIT
 //
+// generation Unix UTC time: 1675067945
+// edit the yaml file and then run 'generateDiagram.go'
+//
 package usecase
 
 import (

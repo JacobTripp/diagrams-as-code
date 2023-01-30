@@ -11,6 +11,7 @@ import (
 	"io"
 	"strings"
 	"text/template"
+	"time"
 
 	"gopkg.in/yaml.v3"
 )
@@ -83,8 +84,16 @@ func (d {{.DiagramName}}) Add(nodeType, name string) error {
 	return nil
 }`)
 
-var packageTemplate, _ = template.New("").Parse(`//
+var fnMap = template.FuncMap{
+	"timeNow": func() int64 {
+		return time.Now().UTC().Unix()
+	},
+}
+var packageTemplate, _ = template.New("").Funcs(fnMap).Parse(`//
 // Auto-generated code, DO NOT EDIT
+//
+// generation Unix UTC time: {{timeNow}}
+// edit the yaml file and then run 'generateDiagram.go'
 //
 package {{.PackageName}}
 
