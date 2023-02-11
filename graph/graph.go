@@ -5,23 +5,10 @@ import bst "github.com/JacobTripp/binarySearchTree"
 type Graph struct {
 	Name   string
 	attrs  *bst.BinarySearchTree
-	Points *bst.BinarySearchTree
-	Lines  *bst.BinarySearchTree
+	points *bst.BinarySearchTree
+	lines  *bst.BinarySearchTree
 }
 
-/*
-what if connections are kept in a matrix where connections are represented
-with a line, for example:
-point1 = NewPoint()
-point2 = NewPoint()
-point3 = NewPoint()
-graph.AddPoint(point1, point2, point3)
-graph = [
-	[0,line1,0], //point1
-	[line1,0,line2], //point2
-	[0,line2,0], //point3
-]
-*/
 func NewGraph(name string) *Graph {
 	points := bst.NewBST(bst.WithSearchable("Name"))
 	lines := bst.NewBST(bst.WithSearchable("Name"))
@@ -29,16 +16,71 @@ func NewGraph(name string) *Graph {
 	return &Graph{
 		Name:   name,
 		attrs:  &attrs,
-		Points: &points,
-		Lines:  &lines,
+		points: &points,
+		lines:  &lines,
 	}
 }
 
-func (g Graph) AddPoint(p *Point) {
+func (g Graph) AddPoint(p Point) {
+	g.points.Insert(bst.NewLeaf(p))
 }
 
-func (g Graph) AddLine(l *Line) {
+func (g Graph) AddLine(l Line) {
+	g.lines.Insert(bst.NewLeaf(l))
 }
 
 func (g Graph) AddAttribute(name, value string) {
+	attr := Attribute{Name: name, Value: value}
+	g.attrs.Insert(bst.NewLeaf(attr))
+}
+
+func (g Graph) GetPoint(search string) Point {
+	leaf := g.points.FindByValue(search)
+	if leaf == nil {
+		return Point{}
+	}
+	return leaf.Value.(Point)
+}
+
+func (g Graph) GetLine(search string) Line {
+	leaf := g.lines.FindByValue(search)
+	if leaf == nil {
+		return Line{}
+	}
+	return leaf.Value.(Line)
+}
+
+func (g Graph) Points() []Point {
+	leafs := g.points.GetAllLeafs()
+	rt := make([]Point, len(leafs))
+	for i, leaf := range leafs {
+		rt[i] = leaf.Value.(Point)
+	}
+	return rt
+}
+
+func (g Graph) Lines() []Line {
+	leafs := g.lines.GetAllLeafs()
+	rt := make([]Line, len(leafs))
+	for i, leaf := range leafs {
+		rt[i] = leaf.Value.(Line)
+	}
+	return rt
+}
+
+func (g Graph) GetAttributeValue(name string) string {
+	f := g.attrs.FindByValue(name)
+	if f == nil {
+		return ""
+	}
+	return f.Value.(Attribute).Value
+}
+
+func (g Graph) Attributes() []Attribute {
+	leafs := g.attrs.GetAllLeafs()
+	rt := make([]Attribute, len(leafs))
+	for i, leaf := range leafs {
+		rt[i] = leaf.Value.(Attribute)
+	}
+	return rt
 }

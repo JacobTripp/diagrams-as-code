@@ -8,7 +8,7 @@ import (
 
 func TestNewLine(t *testing.T) {
 	line := NewLine("foo")
-	assert.IsType(t, &Line{}, line)
+	assert.IsType(t, Line{}, line)
 }
 
 func TestLineAddAttribute(t *testing.T) {
@@ -27,4 +27,13 @@ func TestNewFrom(t *testing.T) {
 func TestNewTo(t *testing.T) {
 	line := NewLine("foo", To(&Point{}))
 	assert.NotNil(t, line.To)
+}
+
+func TestAttributes(t *testing.T) {
+	line := NewLine("foo")
+	assert.Len(t, line.Attributes(), 0)
+	line.AddAttribute("style", "solid")
+	assert.Len(t, line.Attributes(), 1)
+	line.AddAttribute("bar", "baz")
+	assert.Len(t, line.Attributes(), 2)
 }

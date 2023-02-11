@@ -26,14 +26,14 @@ func To(p *Point) lineOpts {
 	}
 }
 
-func NewLine(name string, opts ...lineOpts) *Line {
+func NewLine(name string, opts ...lineOpts) Line {
 	bst := bst.NewBST(bst.WithSearchable("Name"))
-	rt := &Line{
+	rt := Line{
 		Name:  name,
 		attrs: &bst,
 	}
 	for _, opt := range opts {
-		opt(rt)
+		opt(&rt)
 	}
 	return rt
 }
@@ -49,4 +49,13 @@ func (l Line) GetAttrValue(name string) (any, error) {
 	}
 
 	return found.Value.(Attribute).Value, nil
+}
+
+func (l Line) Attributes() []Attribute {
+	leafs := l.attrs.GetAllLeafs()
+	rt := make([]Attribute, len(leafs))
+	for i, leaf := range leafs {
+		rt[i] = leaf.Value.(Attribute)
+	}
+	return rt
 }
