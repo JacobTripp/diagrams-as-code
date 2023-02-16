@@ -14,7 +14,7 @@ func TestNewPoint(t *testing.T) {
 func TestAddAttribute(t *testing.T) {
 	p := NewPoint("foo")
 	p.AddAttribute("color", "blue")
-	attr, err := p.GetAttrValue("color")
+	attr, err := p.GetAttributeValue("color")
 	assert.NoError(t, err)
 	assert.Equal(t, "blue", attr)
 }

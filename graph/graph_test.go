@@ -45,16 +45,24 @@ func TestGetPoint(t *testing.T) {
 	graph := NewGraph("Foo")
 	p := NewPoint("point")
 	graph.AddPoint(p)
-	assert.Equal(t, p, graph.GetPoint("point"))
-	assert.Empty(t, graph.GetPoint("nope"))
+	shouldFind, err := graph.GetPoint("point")
+	assert.NoError(t, err)
+	assert.Equal(t, &p, shouldFind)
+	notFind, err := graph.GetPoint("nope")
+	assert.ErrorIs(t, err, PointNotFound)
+	assert.Nil(t, notFind)
 }
 
 func TestGetLine(t *testing.T) {
 	graph := NewGraph("Foo")
 	l := NewLine("line")
 	graph.AddLine(l)
-	assert.Equal(t, l, graph.GetLine("line"))
-	assert.Empty(t, graph.GetLine("nope"))
+	shouldFind, err := graph.GetLine("line")
+	assert.NoError(t, err)
+	assert.Equal(t, &l, shouldFind)
+	notFind, err := graph.GetLine("nope")
+	assert.ErrorIs(t, err, LineNotFound)
+	assert.Nil(t, notFind)
 }
 
 func TestPoints(t *testing.T) {

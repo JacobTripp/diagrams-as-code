@@ -1,6 +1,11 @@
 package graph
 
-import bst "github.com/JacobTripp/binarySearchTree"
+import (
+	"errors"
+	"fmt"
+
+	bst "github.com/JacobTripp/binarySearchTree"
+)
 
 type Graph struct {
 	Name   string
@@ -34,20 +39,26 @@ func (g Graph) AddAttribute(name, value string) {
 	g.attrs.Insert(bst.NewLeaf(attr))
 }
 
-func (g Graph) GetPoint(search string) Point {
+var PointNotFound = errors.New("point not found")
+
+func (g Graph) GetPoint(search string) (*Point, error) {
 	leaf := g.points.FindByValue(search)
 	if leaf == nil {
-		return Point{}
+		return nil, fmt.Errorf("%w: could not find '%s'", PointNotFound, search)
 	}
-	return leaf.Value.(Point)
+	point := leaf.Value.(Point)
+	return &point, nil
 }
 
-func (g Graph) GetLine(search string) Line {
+var LineNotFound = errors.New("line not found")
+
+func (g Graph) GetLine(search string) (*Line, error) {
 	leaf := g.lines.FindByValue(search)
 	if leaf == nil {
-		return Line{}
+		return nil, fmt.Errorf("%w: cound not find '%s'", LineNotFound, search)
 	}
-	return leaf.Value.(Line)
+	line := leaf.Value.(Line)
+	return &line, nil
 }
 
 func (g Graph) Points() []Point {

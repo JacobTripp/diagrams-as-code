@@ -1,5 +1,6 @@
 diagram:
   name: Use Case
+  type: useCase
   description: >-
     A use case is a situation where your system is used to fulfill one or more
     of your customer's requirements; a use case captures a piece of
@@ -47,6 +48,9 @@ nodes:
       "shape": "rect"
 edges:
   - name: Communication
+    rules:
+      prevent:
+        - to: Actor
     description: >-
       A communication line connects and actor and a use case to show the actor
       participating in the use case. There is a potential to have any number of
@@ -59,6 +63,10 @@ edges:
       "arrowhead": "none"
       "style": "solid"
   - name: Includes
+    rules:
+      prevent: 
+        - from: Actor
+          to: Actor
     description: >-
       When there is repetitive behavior shared between two use cases then that
       behavior is best separated and captured within a new use case. This new
@@ -74,6 +82,10 @@ edges:
       "style": "dashed"
       "label": "<<include>>"
   - name: Generalizaion
+    rules:
+      prevent:
+        - from: Actor
+          to: Actor
     description: >-
       Sometimes there are use cases whose behavior can be applied to several
       different cases, but with small changes. Unlike the include relationship

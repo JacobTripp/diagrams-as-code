@@ -42,7 +42,7 @@ func (l Line) AddAttribute(name, value string) {
 	l.attrs.Insert(bst.NewLeaf(Attribute{Name: name, Value: value}))
 }
 
-func (l Line) GetAttrValue(name string) (any, error) {
+func (l Line) GetAttributeValue(name string) (any, error) {
 	found := l.attrs.FindByValue(name)
 	if found == nil {
 		return nil, fmt.Errorf("could not find attribute: %s", name)

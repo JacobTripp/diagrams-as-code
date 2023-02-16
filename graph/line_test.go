@@ -14,7 +14,7 @@ func TestNewLine(t *testing.T) {
 func TestLineAddAttribute(t *testing.T) {
 	line := NewLine("foo")
 	line.AddAttribute("style", "solid")
-	value, err := line.GetAttrValue("style")
+	value, err := line.GetAttributeValue("style")
 	assert.NoError(t, err)
 	assert.Equal(t, "solid", value)
 }

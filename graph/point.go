@@ -23,7 +23,8 @@ func (p Point) AddAttribute(name, value string) {
 	p.attrs.Insert(bst.NewLeaf(Attribute{Name: name, Value: value}))
 }
 
-func (p Point) GetAttrValue(name string) (any, error) {
+// TODO fix this name so it matches others in the package
+func (p Point) GetAttributeValue(name string) (any, error) {
 	found := p.attrs.FindByValue(name)
 	if found == nil {
 		return nil, fmt.Errorf("could not find attribute: %s", name)
