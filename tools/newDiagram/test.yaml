@@ -1,0 +1,35 @@
+diagram:
+  name: Test Diagram
+  description: This is a test, with "quotes".
+  attributes:
+    "label": "test"
+  type: useCase
+nodes:
+  - name: Node1
+    Description: Node one.
+    attributes:
+      "shape": "oval"
+      "cluster": "true"
+      "color": "gray"
+  - name: Node2
+    Description: Node two.
+    attributes:
+      "shape": "rect"
+edges:
+  - name: Edge1
+    disallow:
+      to:
+        - Node1
+    description: this edge can only go to Node2
+    attributes:
+      "arrowhead": "none"
+      "style": "solid"
+  - name: Edge2
+    disallow:
+      from:
+        - Node1
+    description: This edge can only start form Node2
+    attributes:
+      "arrowhead": "open"
+      "style": "dashed"
+      "label": "<<include>>"

@@ -11,9 +11,9 @@ type Point struct {
 	attrs *bst.BinarySearchTree
 }
 
-func NewPoint(name string) *Point {
+func NewPoint(name string) Point {
 	bst := bst.NewBST(bst.WithSearchable("Name"))
-	return &Point{
+	return Point{
 		Name:  name,
 		attrs: &bst,
 	}
@@ -23,11 +23,21 @@ func (p Point) AddAttribute(name, value string) {
 	p.attrs.Insert(bst.NewLeaf(Attribute{Name: name, Value: value}))
 }
 
-func (p Point) GetAttrValue(name string) (any, error) {
+// TODO fix this name so it matches others in the package
+func (p Point) GetAttributeValue(name string) (any, error) {
 	found := p.attrs.FindByValue(name)
 	if found == nil {
 		return nil, fmt.Errorf("could not find attribute: %s", name)
 	}
 
 	return found.Value.(Attribute).Value, nil
+}
+
+func (p Point) Attributes() []Attribute {
+	leafs := p.attrs.GetAllLeafs()
+	rt := make([]Attribute, len(leafs))
+	for i, leaf := range leafs {
+		rt[i] = leaf.Value.(Attribute)
+	}
+	return rt
 }
