@@ -9,7 +9,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/JacobTripp/diagrams-as-code/dot/attribute"
+	"github.com/JacobTripp/diagrams-as-code/pkg/dot/attribute"
 )
 
 // The representation of a node where the Name becomes the node ID.

@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/JacobTripp/diagrams-as-code/dot/attribute"
-	"github.com/JacobTripp/diagrams-as-code/dot/node"
+	"github.com/JacobTripp/diagrams-as-code/pkg/dot/attribute"
+	"github.com/JacobTripp/diagrams-as-code/pkg/dot/node"
 )
 
 type Edge struct {
