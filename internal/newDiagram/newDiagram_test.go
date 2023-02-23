@@ -1,10 +1,12 @@
-package newDiagram_test
+package newDiagram
 
 import (
+	"bytes"
 	"html/template"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
 func TestLoadTemplate(t *testing.T) {
@@ -30,20 +32,36 @@ func TestRecieverName(t *testing.T) {
 	assert.Equal(t, "_fo", rn)
 }
 
-func TestLoadYaml(t *testing.T) {
-	y, sum := loadYaml("./test.yaml")
-	assert.NotEmpty(t, sum)
-	assert.Len(t, sum, 32)
-	assert.IsType(t, &data{}, y)
-	assert.NotEmpty(t, y)
+type mockDiagram struct {
+	mock.Mock
+}
+
+func (m *mockDiagram) GetString(s string) string {
+	return "GetString"
+}
+
+func (m *mockDiagram) Get(s string) interface{} {
+	if s == "nodes" || s == "edges" {
+		return []map[string]string{
+			{
+				"name": "foo",
+			},
+			{
+				"name": "bar",
+			},
+		}
+	}
+	return "Get"
 }
 
 func TestRender(t *testing.T) {
-	tmpl, _ := loadTemplate("./diagram.go.tmpl")
-	assert.NotEmpty(t, tmpl)
-	y, _ := loadYaml("./test.yaml")
-	code := render(tmpl, y)
-	assert.Contains(t, code, "// Auto-generated; DO NOT EDIT")
+	code := bytes.NewBuffer([]byte{})
+	dataMock := new(mockDiagram)
+	dataMock.On("GetString").Return("get string")
+	dataMock.On("Get").Return("get")
+	err := Render(code, "./diagram.go.tmpl", new(mockDiagram))
+	assert.NoError(t, err)
+	assert.Contains(t, code.String(), "// Auto-generated; DO NOT EDIT")
 }
 
 func TestMain(t *testing.T) {

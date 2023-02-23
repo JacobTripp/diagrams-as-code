@@ -3,7 +3,7 @@ package node
 import (
 	"testing"
 
-	"github.com/JacobTripp/diagrams-as-code/dot/attribute"
+	"github.com/JacobTripp/diagrams-as-code/pkg/dot/attribute"
 	"github.com/stretchr/testify/assert"
 )
 
