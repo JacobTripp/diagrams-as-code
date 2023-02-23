@@ -1,4 +1,4 @@
-package main
+package newDiagram_test
 
 import (
 	"html/template"
@@ -43,6 +43,9 @@ func TestRender(t *testing.T) {
 	assert.NotEmpty(t, tmpl)
 	y, _ := loadYaml("./test.yaml")
 	code := render(tmpl, y)
-	t.Log(code)
 	assert.Contains(t, code, "// Auto-generated; DO NOT EDIT")
+}
+
+func TestMain(t *testing.T) {
+
 }
