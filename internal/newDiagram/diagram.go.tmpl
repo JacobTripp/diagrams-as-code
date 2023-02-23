@@ -1,0 +1,144 @@
+//
+// Auto-generated; DO NOT EDIT
+//
+// rendered at: {{renderedAt}}
+// yaml hash: {{yamlHash}}
+// template hash: {{templateHash}}
+//
+package {{packageName (.GetString "diagram.name")}}
+
+import (
+  "errors"
+  "fmt"
+
+	"github.com/JacobTripp/diagrams-as-code/graph"
+)
+
+type {{.GetString "diagram.type"}} struct {
+  *graph.Graph
+}
+
+func New() {{.GetString "diagram.type"}} {
+_r := {{.GetString "diagram.type"}}{graph.NewGraph("{{.GetString "diagram.type"}}")}
+  {{if ne (.GetString "diagram.description") ""}}
+    _r.AddAttribute("description", "{{.GetString "diagram.description"}}")
+  {{end}}
+  return _r
+}
+
+{{/* NODES */}}
+{{range $node := .Get "nodes"}}
+func ({{recieverName ($.GetString "diagram.type")}} {{$.GetString "diagram.type"}}) Add{{$node.name}}(name string) {
+  {{recieverName ($.GetString "diagram.type")}}.AddPoint(new{{$node.name}}(name))
+}
+func new{{$node.name}}(name string) graph.Point {
+  _{{$node.name}} := graph.NewPoint(name)
+  {{range $key, $val := .Attributes}}
+    _{{$node.name}}.AddAttribute("{{$key}}", "{{$val}}")
+  {{end}}
+  return _{{$node.name}}
+}
+{{end}}
+
+type node interface {
+  GetAttributeValue(string) (any, error)
+}
+
+func typeString(n node) string {
+  v, _ := n.GetAttributeValue("type")
+  return v.(string)
+}
+
+type connectRule struct {
+  from []string
+  to []string
+}
+
+var ConnectionError = errors.New("invalid connection")
+
+func connectionValidation(isFromNode bool, nodeType, lineType string) error {
+  m := map[string]connectRule{
+  {{range $edge := .Get "edges"}}
+    "{{$edge.name}}": connectRule{
+    from: []string{ {{ range $edge.disallow.from}}
+      "{{.}}",
+  {{end}}},
+    to: []string{ {{ range $edge.disallow.to}}
+      "{{.}}",
+  {{end}}},
+    },
+  {{end}}
+  }
+  
+  var list []string
+  if isFromNode {
+    list = m[lineType].from
+  } else {
+    list = m[lineType].to
+  }
+
+  for _, v := range list {
+    if v == nodeType {
+      return ConnectionError
+    }
+  }
+
+  return nil
+}
+
+{{/* EDGES */}}
+{{range $edge := .Get "edges"}}
+var {{$edge.name}}Error = errors.New("invalid {{$edge.name}}")
+
+func ({{recieverName ($.GetString "diagram.type")}} {{$.GetString "diagram.type"}}) {{$edge.name}}(fromName, toName string) error {
+foundTo, err := {{recieverName ($.GetString "diagram.type")}}.GetPoint(toName)
+	if err == nil {
+    err = connectionValidation(false, typeString(foundTo), "{{.Name}}")
+	}
+	if err != nil {
+    return fmt.Errorf("%w: %s", {{$edge.name}}Error, err)
+	}
+
+  foundFrom, err := {{recieverName ($.GetString "diagram.type")}}.GetPoint(fromName)
+	if err == nil {
+    err = connectionValidation(true, typeString(foundFrom), "{{$edge.name}}")
+	}
+	if err != nil {
+    return fmt.Errorf("%w: %s", {{$edge.name}}Error, err)
+	}
+
+  line := new{{$edge.name}}(foundFrom.Name + "{{$edge.name}}" + foundTo.Name)
+	line.From = foundFrom
+	line.To = foundTo
+  {{recieverName ($.GetString "diagram.type")}}.AddLine(line)
+	return nil
+}
+
+func new{{$edge.name}}(name string) graph.Line {
+  _line := graph.NewLine(name)
+  {{if ne .Description ""}}
+    _line.AddAttribute("description", "{{$edge.Description}}")
+  {{end}}
+  {{range $name, $value := .Attributes}}
+    _line.AddAttribute("{{$name}}", "{{$value}}")
+  {{end}}
+  return _line
+}
+{{end}}
+
+var nodes = []string{
+{{range $node := .Get "nodes"}}
+  "{{$node.name}}",
+{{end}}}
+
+var edges = []string{
+{{range $edge := .Get "edges"}}
+  "{{$edge.name}}",
+{{end}}}
+
+func ({{recieverName (.GetString "diagram.type")}} {{.GetString "diagram.type"}}) ListNodes() []string {
+  return nodes
+}
+func ({{recieverName (.GetString "diagram.type")}} {{.GetString "diagram.type"}}) ListEdges() []string {
+  return edges
+}
